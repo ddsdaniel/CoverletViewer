@@ -26,30 +26,29 @@ namespace CoverletViewer.Forms
         {
             lvwResult.Items.Clear();
 
-            var jsonContent = System.IO.File.ReadAllText(fileName);
+            var jsonContent = File.ReadAllText(fileName);
 
-            var jsonObject = JObject.Parse(jsonContent); // parse as array  
-            var projetos = ImportarProjetos(jsonObject);
+            var jsonObject = JObject.Parse(jsonContent);
+            var projects = ImportProjects(jsonObject);
 
-            foreach (var projeto in projetos)
+            foreach (var project in projects)
             {
-                AddLine(projeto, projeto.Nome, projeto.PercentualCobertura, projeto.TotalLinhasCobertas, projeto.TotalLinhas);
+                AddLine(project, project.Name, project.PercentageCoverage, project.CoveredLines, project.TotalLines);
 
-                foreach (var arquivo in projeto.Arquivos)
-                    AddLine(arquivo, $"    {arquivo.Caminho}", arquivo.PercentualCobertura, arquivo.TotalLinhasCobertas, arquivo.TotalLinhas);
+                foreach (var file in project.Files)
+                    AddLine(file, $"    {file.Path}", file.PercentageCoverage, file.CoveredLines, file.TotalLines);
             }
         }
 
-        private void AddLine(object indicador, string name, decimal coverlate, int linhasCobertas, int totalLinhas)
+        private void AddLine(object indicator, string name, decimal coverlate, int coveredLines, int totalLines)
         {
             var item = new ListViewItem();
             for (var i = 0; i < lvwResult.Columns.Count - 1; i++)
                 item.SubItems.Add("");
-            item.Tag = indicador;
-            //item.ImageKey = extension;
+            item.Tag = indicator;
             item.SubItems[0].Text = name;
             item.SubItems[1].Text = $"{coverlate:0.0}%";
-            item.SubItems[2].Text = $"{linhasCobertas}/{totalLinhas}";
+            item.SubItems[2].Text = $"{coveredLines}/{totalLines}";
             lvwResult.Items.Add(item);
         }
 
@@ -71,7 +70,7 @@ namespace CoverletViewer.Forms
 
         private void lvwResult_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var file = lvwResult.Items[lvwResult.SelectedItems[0].Index].Tag as Arquivo;
+            var file = lvwResult.Items[lvwResult.SelectedItems[0].Index].Tag as CodeFile;
             if (file != null)
             {
                 var fileCoverage = new FrmFileCoverage(file);
@@ -79,76 +78,78 @@ namespace CoverletViewer.Forms
             }
         }
 
-        private List<Projeto> ImportarProjetos(JObject objeto)
+        private List<Project> ImportProjects(JObject jObject)
         {
-            var projetos = new List<Projeto>();
-            foreach (var prj in objeto)
+            var projects = new List<Project>();
+            foreach (var prj in jObject)
             {
-                var projeto = new Projeto(prj.Key);
-                projeto.Arquivos = ImportarArquivos(prj.Value);
+                var project = new Project(prj.Key)
+                {
+                    Files = ImportFiles(prj.Value)
+                };
 
-                projetos.Add(projeto);
+                projects.Add(project);
 
             }
 
-            return projetos;
+            return projects;
         }
 
-        private List<Arquivo> ImportarArquivos(JToken projeto)
+        private List<CodeFile> ImportFiles(JToken projectToken)
         {
-            var arquivos = new List<Arquivo>();
+            var arquivos = new List<CodeFile>();
 
-            foreach (JProperty arq in (JToken)projeto)
+            foreach (JProperty fileProperty in projectToken)
             {
-                var arquivo = new Arquivo { Caminho = arq.Name };
-                arquivo.Classes = ImportarClasses(arq.Value);
+                var file = new CodeFile { Path = fileProperty.Name };
+                file.Classes = ImportClasses(fileProperty.Value);
 
-                arquivos.Add(arquivo);
+                arquivos.Add(file);
 
             }
             return arquivos;
         }
 
-        private List<Classe> ImportarClasses(JToken arquivo)
+        private List<Class> ImportClasses(JToken fileToken)
         {
-            var classes = new List<Classe>();
+            var classes = new List<Class>();
 
-            foreach (JProperty cls in arquivo)
+            foreach (JProperty classProperty in fileToken)
             {
-                var classe = new Classe { Nome = cls.Name };
-                classe.Metodos = ImportarMetodos(cls.Value);
+                var newClass = new Class { Name = classProperty.Name };
+                newClass.Methods = ImportMethods(classProperty.Value);
 
-                classes.Add(classe);
+                classes.Add(newClass);
 
             }
             return classes;
         }
 
-        private List<Metodo> ImportarMetodos(JToken classe)
+        private List<Method> ImportMethods(JToken classToken)
         {
-            var metodos = new List<Metodo>();
+            var methods = new List<Method>();
 
-            foreach (JProperty met in classe)
+            foreach (JProperty methodProperty in classToken)
             {
-                var metodo = new Metodo { Nome = met.Name };
-                ImportarLinhas(metodo, met.Value);
-                metodos.Add(metodo);
+                var metodo = new Method { Name = methodProperty.Name };
+                ImportLines(metodo, methodProperty.Value);
+                methods.Add(metodo);
             }
-            return metodos;
+            return methods;
         }
 
-        private void ImportarLinhas(Metodo metodo1, JToken metodo)
+        private void ImportLines(Method method, JToken methodToken)
         {
-            foreach (JProperty linhasProperty in metodo)
+            foreach (JProperty linesProperty in methodToken)
             {
-                if (linhasProperty.Name == "Lines")
+                if (linesProperty.Name == "Lines")
                 {
-                    foreach (JProperty lin in linhasProperty.Value)
+                    foreach (JProperty lin in linesProperty.Value)
                     {
                         if (lin.Value.ToString() == "0")
-                            metodo1.LinhasNaoCobertas.Add(Convert.ToInt32(lin.Name));
+                            method.NotCoveredLines.Add(Convert.ToInt32(lin.Name));
                         else
-                            metodo1.LinhasCobertas.Add(Convert.ToInt32(lin.Name));
+                            method.CoveredLines.Add(Convert.ToInt32(lin.Name));
                     }
                 }
             }
@@ -168,17 +169,17 @@ namespace CoverletViewer.Forms
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            var achou = false;
+            var found = false;
             foreach (ListViewItem item in lvwResult.Items)
             {
                 if (item.SubItems[0].Text.ToLower().Contains(txtSearch.Text.ToLower()))
                 {
                     item.ForeColor = lvwResult.ForeColor;
 
-                    if (!achou)
+                    if (!found)
                         lvwResult.EnsureVisible(item.Index);
 
-                    achou = true;
+                    found = true;
                 }
                 else
                 {

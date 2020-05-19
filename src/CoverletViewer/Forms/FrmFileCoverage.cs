@@ -9,66 +9,64 @@ namespace CoverletViewer.Forms
 {
     public partial class FrmFileCoverage : Form
     {
-        private readonly Arquivo _arquivo;
-        private enum StatusLinha
+        private readonly CodeFile _codeFile;
+        private enum LineStatus
         {
-            Normal,
-            Coberta,
-            NaoCoberta
+            Ignored,
+            Covered,
+            NotCovered
         }
 
-        public FrmFileCoverage(Arquivo arquivo)
+        public FrmFileCoverage(CodeFile codeFile)
         {
             InitializeComponent();
-            _arquivo = arquivo;
+            _codeFile = codeFile;
         }
 
         private void FrmFileCoverage_Load(object sender, EventArgs e)
         {
             FormatListView();
-            var lines = File.ReadAllLines(_arquivo.Caminho);
+            var lines = File.ReadAllLines(_codeFile.Path);
             for (int i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
-                StatusLinha statusLinha;
-                if (_arquivo.Classes.Any(c => c.Metodos.Any(m => m.LinhasNaoCobertas.Contains(i + 1))))
-                    statusLinha = StatusLinha.NaoCoberta;
-                else if (_arquivo.Classes.Any(c => c.Metodos.Any(m => m.LinhasCobertas.Contains(i + 1))))
-                    statusLinha = StatusLinha.Coberta;
+                LineStatus lineStatus;
+                if (_codeFile.Classes.Any(c => c.Methods.Any(m => m.NotCoveredLines.Contains(i + 1))))
+                    lineStatus = LineStatus.NotCovered;
+                else if (_codeFile.Classes.Any(c => c.Methods.Any(m => m.CoveredLines.Contains(i + 1))))
+                    lineStatus = LineStatus.Covered;
                 else
-                    statusLinha = StatusLinha.Normal;
+                    lineStatus = LineStatus.Ignored;
 
-                AddLine(line, statusLinha, i + 1);
+                AddLine(line, lineStatus, i + 1);
             }
             lvwResult.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void AddLine(string line, StatusLinha statusLinha, int lineNumber)
+        private void AddLine(string line, LineStatus lineStatus, int lineNumber)
         {
             var item = new ListViewItem();
             for (var i = 0; i < lvwResult.Columns.Count - 1; i++)
                 item.SubItems.Add("");
-            //item.Tag = file;
-            //item.ImageKey = extension;
             item.SubItems[0].Text = lineNumber.ToString("#,##0");
             item.SubItems[1].Text = line;
 
-            Color cor;
-            switch (statusLinha)
+            Color color;
+            switch (lineStatus)
             {
-                case StatusLinha.Normal:
-                    cor = SystemColors.GrayText;// lvwResult.ForeColor;
+                case LineStatus.Ignored:
+                    color = SystemColors.GrayText;
                     break;
-                case StatusLinha.Coberta:
-                    cor = Color.Blue;
+                case LineStatus.Covered:
+                    color = Color.Blue;
                     break;
-                case StatusLinha.NaoCoberta:
-                    cor = Color.Red;
+                case LineStatus.NotCovered:
+                    color = Color.Red;
                     break;
                 default:
-                    throw new NotImplementedException($"StatusLinha: {statusLinha}");
+                    throw new NotImplementedException($"LineStatus: {lineStatus}");
             }
-            item.ForeColor = cor;
+            item.ForeColor = color;
             lvwResult.Items.Add(item);
         }
 
