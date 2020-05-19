@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using CoverletViewer.Domain.Models;
+using CoverletViewer.Domain.Services;
+using System.IO;
 
 namespace CoverletViewer.Forms
 {
@@ -183,6 +185,38 @@ namespace CoverletViewer.Forms
                     item.ForeColor = SystemColors.GrayText;
                 }
             }
+        }
+
+        private void tsbRunDotnetTest_Click(object sender, EventArgs e)
+        {
+            var openFileSolution = new OpenFileDialog
+            {
+                Filter = "*Solution Files (*.sln)|*.sln"
+            };
+            if (openFileSolution.ShowDialog() == DialogResult.OK)
+            {
+                Cursor = Cursors.WaitCursor;
+
+                var msDosService = new MsDosService();
+
+                var commandLine = $"dotnet test \"{openFileSolution.FileName}\" /p:CollectCoverage=true ";
+                commandLine += "/p:CoverletOutput=..\\results\\coverage ";
+                commandLine += "/p:MergeWith=..\\results\\coverage.json ";
+                commandLine += "/p:CoverletOutputFormat=\"json\"";
+
+                var result = msDosService.Run(commandLine);
+
+                var folderSolutionPath = Path.GetDirectoryName(openFileSolution.FileName);
+                var coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
+                
+                Cursor = Cursors.Default;
+
+                if (coverageJsonFiles.Length > 0)
+                    Import(coverageJsonFiles[0]);
+                else
+                    MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
+            }
+
         }
     }
 }
