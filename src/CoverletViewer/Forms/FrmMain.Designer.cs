@@ -30,10 +30,10 @@
         {
             this.lvwResult = new System.Windows.Forms.ListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.tsbRunDotnetTest = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpen = new System.Windows.Forms.ToolStripButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.tsbOpen = new System.Windows.Forms.ToolStripButton();
-            this.tsbRunDotnetTest = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,6 +60,24 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // tsbRunDotnetTest
+            // 
+            this.tsbRunDotnetTest.Image = global::CoverletViewer.Properties.Resources.png_play_32_32;
+            this.tsbRunDotnetTest.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbRunDotnetTest.Name = "tsbRunDotnetTest";
+            this.tsbRunDotnetTest.Size = new System.Drawing.Size(108, 22);
+            this.tsbRunDotnetTest.Text = "Run dotnet test";
+            this.tsbRunDotnetTest.Click += new System.EventHandler(this.tsbRunDotnetTest_Click);
+            // 
+            // tsbOpen
+            // 
+            this.tsbOpen.Image = global::CoverletViewer.Properties.Resources.png_open_folder_16x16;
+            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbOpen.Name = "tsbOpen";
+            this.tsbOpen.Size = new System.Drawing.Size(100, 22);
+            this.tsbOpen.Text = "Open json file";
+            this.tsbOpen.Click += new System.EventHandler(this.tsbOpen_Click);
+            // 
             // txtSearch
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -79,24 +97,6 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "Search in files result";
             // 
-            // tsbOpen
-            // 
-            this.tsbOpen.Image = global::CoverletViewer.Properties.Resources.png_open_folder_16x16;
-            this.tsbOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbOpen.Name = "tsbOpen";
-            this.tsbOpen.Size = new System.Drawing.Size(100, 22);
-            this.tsbOpen.Text = "Open json file";
-            this.tsbOpen.Click += new System.EventHandler(this.tsbOpen_Click);
-            // 
-            // tsbRunDotnetTest
-            // 
-            this.tsbRunDotnetTest.Image = global::CoverletViewer.Properties.Resources.png_play_32_32;
-            this.tsbRunDotnetTest.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tsbRunDotnetTest.Name = "tsbRunDotnetTest";
-            this.tsbRunDotnetTest.Size = new System.Drawing.Size(108, 22);
-            this.tsbRunDotnetTest.Text = "Run dotnet test";
-            this.tsbRunDotnetTest.Click += new System.EventHandler(this.tsbRunDotnetTest_Click);
-            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -107,6 +107,7 @@
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.lvwResult);
             this.Name = "FrmMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmMain";
             this.Load += new System.EventHandler(this.FrmMain_Load);
             this.toolStrip1.ResumeLayout(false);

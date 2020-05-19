@@ -36,6 +36,7 @@
             this.lvwResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.lvwResult.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lvwResult.HideSelection = false;
             this.lvwResult.Location = new System.Drawing.Point(12, 12);
             this.lvwResult.Name = "lvwResult";
@@ -50,6 +51,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.lvwResult);
             this.Name = "FrmFileCoverage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "FrmFileCoverage";
             this.Load += new System.EventHandler(this.FrmFileCoverage_Load);
             this.ResumeLayout(false);
