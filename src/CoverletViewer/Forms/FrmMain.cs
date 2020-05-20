@@ -24,15 +24,23 @@ namespace CoverletViewer.Forms
             lvwResult.Items.Clear();
 
             var importService = new ImportService();
-            var projects = importService.Import(fileName);            
+            var projects = importService.Import(fileName);
 
-            foreach (var project in projects)
+            var organizeService = new ResultsOrganizerService(projects);
+            var results = organizeService.Organize();
+
+            foreach (var result in results)
             {
-                AddLine(project, project.Name, project.PercentageCoverage, project.CoveredLines, project.TotalLines);
-
-                foreach (var file in project.Files)
-                    AddLine(file, $"    {file.Path}", file.PercentageCoverage, file.CoveredLines, file.TotalLines);
+                AddLine(result, result.Name, result.PercentageCoverage, result.CoveredLines, result.TotalLines);
             }
+
+            //foreach (var project in projects)
+            //{
+            //    AddLine(project, project.Name, project.PercentageCoverage, project.CoveredLines, project.TotalLines);
+
+            //    foreach (var file in project.Files)
+            //        AddLine(file, $"    {file.Path}", file.PercentageCoverage, file.CoveredLines, file.TotalLines);
+            //}
         }
 
         private void AddLine(object indicator, string name, decimal coverlate, int coveredLines, int totalLines)
