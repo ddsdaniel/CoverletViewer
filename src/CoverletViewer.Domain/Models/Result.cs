@@ -12,10 +12,18 @@ namespace CoverletViewer.Domain.Models
         public override int NotCoveredLines => _notCoveredLines;
         public override int CoveredLines => _coveredLines;
         public string Name { get; private set; }
+        public CodeFile CodeFile { get; }
 
         public Result(string name)
+            : this(name, null)
+        {
+            
+        }
+
+        public Result(string name, CodeFile codeFile)
         {
             Name = name;
+            CodeFile = codeFile;
         }
 
         public override string ToString() => Name;

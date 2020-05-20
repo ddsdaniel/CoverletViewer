@@ -18,33 +18,34 @@ namespace CoverletViewer.Domain.Services
         {
             var results = new List<Result>();
 
-            //TODO: acho que nao precisa desta conversao, isso facilitaria encontrar o arquivo no projeto, seria o proprio
-            var files = _projects.SelectMany(p => p.Files.Select(f => f.Path)).ToList();
-
-            foreach (var file in files)
+            foreach (var project in _projects)
             {
-                var folders = file.Split('\\');
-                var fullFolderPath = "";
-
-                //TODO: revisar aqui
-                var codeFile = _projects.Select(p => p.Files.FirstOrDefault(f => f.Path.ToLower() == file.ToLower())).FirstOrDefault();
-                //if (codeFile != null)
-                //{
-                for (int i = 0; i < folders.Length - 1; i++)
+                foreach (var file in project.Files)
                 {
-                    var folder = folders[i];
-                    fullFolderPath += $"{folder}\\";
+                    var parts = file.Path.Split('\\');
+                    var tabs = "";
 
-                    var result = results.FirstOrDefault(r => r.Name == fullFolderPath);
-
-                    if (result == null)
+                    for (int i = 0; i < parts.Length; i++)
                     {
-                        result = new Result(fullFolderPath);
-                        results.Add(result);
+                        var part = parts[i];
+                        tabs += "  ";
+                        var resultName = $"{tabs}{part}";
+
+                        var result = results.FirstOrDefault(r => r.Name == resultName);
+
+                        if (result == null)
+                        {
+                            if (i == parts.Length -1)
+                                result = new Result(resultName, file);
+                            else
+                                result = new Result(resultName);
+                            results.Add(result);
+                        }
+                        result.Increment(file);
                     }
-                    result.Increment(codeFile);
                 }
-                //}
+
+
             }
 
             return results;

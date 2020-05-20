@@ -31,27 +31,19 @@ namespace CoverletViewer.Forms
 
             foreach (var result in results)
             {
-                AddLine(result, result.Name, result.PercentageCoverage, result.CoveredLines, result.TotalLines);
+                AddLine(result);
             }
-
-            //foreach (var project in projects)
-            //{
-            //    AddLine(project, project.Name, project.PercentageCoverage, project.CoveredLines, project.TotalLines);
-
-            //    foreach (var file in project.Files)
-            //        AddLine(file, $"    {file.Path}", file.PercentageCoverage, file.CoveredLines, file.TotalLines);
-            //}
         }
 
-        private void AddLine(object indicator, string name, decimal coverlate, int coveredLines, int totalLines)
+        private void AddLine(Result result)
         {
             var item = new ListViewItem();
             for (var i = 0; i < lvwResult.Columns.Count - 1; i++)
                 item.SubItems.Add("");
-            item.Tag = indicator;
-            item.SubItems[0].Text = name;
-            item.SubItems[1].Text = $"{coverlate:0.0}%";
-            item.SubItems[2].Text = $"{coveredLines}/{totalLines}";
+            item.Tag = result;
+            item.SubItems[0].Text = result.Name;
+            item.SubItems[1].Text = $"{result.CoveredLines}/{result.TestableLines}";
+            item.SubItems[2].Text = $"{result.PercentageCoverage:0.0}%";
             lvwResult.Items.Add(item);
         }
 
@@ -64,8 +56,8 @@ namespace CoverletViewer.Forms
             lvwResult.AllowDrop = false;
 
             lvwResult.Columns.Add("Item", (int)(lvwResult.Width * 0.65));
-            lvwResult.Columns.Add("Coverage", (int)(lvwResult.Width * 0.1));
-            lvwResult.Columns.Add("Lines", (int)(lvwResult.Width * 0.2));
+            lvwResult.Columns.Add("Lines", (int)(lvwResult.Width * 0.2), HorizontalAlignment.Right);
+            lvwResult.Columns.Add("Coverage", (int)(lvwResult.Width * 0.1), HorizontalAlignment.Right);
             lvwResult.Scrollable = true;
 
             lvwResult.MouseDoubleClick += lvwResult_MouseDoubleClick;
@@ -73,13 +65,16 @@ namespace CoverletViewer.Forms
 
         private void lvwResult_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            var file = lvwResult.Items[lvwResult.SelectedItems[0].Index].Tag as CodeFile;
-            if (file != null)
+            var result = lvwResult.Items[lvwResult.SelectedItems[0].Index].Tag as Result;
+            if (result != null)
             {
-                var fileCoverage = new FrmFileCoverage(file);
-                fileCoverage.ShowDialog();
+                if (result.CodeFile != null)
+                {
+                    var fileCoverage = new FrmFileCoverage(result.CodeFile);
+                    fileCoverage.ShowDialog();
+                }
             }
-        }        
+        }
 
         private void tsbOpen_Click(object sender, EventArgs e)
         {
@@ -95,6 +90,11 @@ namespace CoverletViewer.Forms
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
+            SearchInResults();
+        }
+
+        private void SearchInResults()
+        {
             var found = false;
             foreach (ListViewItem item in lvwResult.Items)
             {
@@ -103,8 +103,11 @@ namespace CoverletViewer.Forms
                     item.ForeColor = lvwResult.ForeColor;
 
                     if (!found)
+                    {
                         lvwResult.EnsureVisible(item.Index);
-
+                        item.Selected = true;
+                        lvwResult.HideSelection = false;
+                    }
                     found = true;
                 }
                 else
@@ -135,13 +138,13 @@ namespace CoverletViewer.Forms
 
                 var folderSolutionPath = Path.GetDirectoryName(openFileSolution.FileName);
                 var coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
-                
+
                 Cursor = Cursors.Default;
 
                 if (coverageJsonFiles.Length > 0)
                     Import(coverageJsonFiles[0]);
                 else
-                    MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);                
+                    MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
         }

@@ -55,18 +55,18 @@ namespace CoverletViewer.Forms
             switch (lineStatus)
             {
                 case LineStatus.Ignored:
-                    color = SystemColors.GrayText;
+                    color = item.BackColor;
                     break;
                 case LineStatus.Covered:
-                    color = Color.Blue;
+                    color = Color.LightGreen;
                     break;
                 case LineStatus.NotCovered:
-                    color = Color.Red;
+                    color = Color.LightCoral;
                     break;
                 default:
                     throw new NotImplementedException($"LineStatus: {lineStatus}");
             }
-            item.ForeColor = color;
+            item.BackColor = color;
             lvwResult.Items.Add(item);
         }
 
