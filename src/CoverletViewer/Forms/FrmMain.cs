@@ -4,6 +4,9 @@ using System.Windows.Forms;
 using CoverletViewer.Domain.Models;
 using CoverletViewer.Domain.Services;
 using System.IO;
+using System.Diagnostics;
+using CoverletViewer.Properties;
+using System.Reflection;
 
 namespace CoverletViewer.Forms
 {
@@ -16,6 +19,8 @@ namespace CoverletViewer.Forms
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            Icon = Resources.ico_coverlet_viewer;
+            tsslVersion.Text= $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             FormatListView();
         }
 
@@ -70,7 +75,7 @@ namespace CoverletViewer.Forms
             {
                 if (result.CodeFile != null)
                 {
-                    var fileCoverage = new FrmFileCoverage(result.CodeFile);
+                    var fileCoverage = new FrmFileCoverage(result.CodeFile) { Icon = Icon };
                     fileCoverage.ShowDialog();
                 }
             }
@@ -147,6 +152,11 @@ namespace CoverletViewer.Forms
                     MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
+        }
+
+        private void tsbGitHub_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/ddsdaniel/CoverletViewer");
         }
     }
 }

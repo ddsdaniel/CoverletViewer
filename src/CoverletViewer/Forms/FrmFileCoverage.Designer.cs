@@ -52,7 +52,7 @@
             this.Controls.Add(this.lvwResult);
             this.Name = "FrmFileCoverage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FrmFileCoverage";
+            this.Text = "File Coverage Details";
             this.Load += new System.EventHandler(this.FrmFileCoverage_Load);
             this.ResumeLayout(false);
 

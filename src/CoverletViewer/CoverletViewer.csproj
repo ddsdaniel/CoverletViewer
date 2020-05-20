@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\ico_coverlet_viewer.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -107,6 +110,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\png_play_32_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\png_github_32_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\png_coverlet_viewer_128_128.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\png_coverlet_64_64.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ico_coverlet_viewer.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
