@@ -5,4 +5,4 @@ CoverletViewer is a viewer of JSON files produced by Coverlet. It also has a fea
 ![Ovwerview](docs/overview.gif)
 
 ## Download Binaries
-[1.0.1](https://github.com/ddsdaniel/CoverletViewer/blob/master/binaries/1.0.1.zip)
+[1.0.1](https://github.com/ddsdaniel/CoverletViewer/raw/master/binaries/1.0.1.zip)
