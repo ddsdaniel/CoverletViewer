@@ -24,21 +24,24 @@ namespace CoverletViewer.Domain.Services
                 {
                     var parts = file.Path.Split('\\');
                     var tabs = "";
+                    var fullPath = "";
 
                     for (int i = 0; i < parts.Length; i++)
                     {
                         var part = parts[i];
+                        fullPath += part + (i == parts.Length - 1 ? "" : "\\");
+
                         tabs += "  ";
                         var resultName = $"{tabs}{part}";
 
-                        var result = results.FirstOrDefault(r => r.Name == resultName);
+                        var result = results.FirstOrDefault(r => r.FullPath == fullPath);
 
                         if (result == null)
                         {
                             if (i == parts.Length -1)
-                                result = new Result(resultName, file);
+                                result = new Result(resultName, fullPath, file);
                             else
-                                result = new Result(resultName);
+                                result = new Result(resultName, fullPath);
                             results.Add(result);
                         }
                         result.Increment(file);
