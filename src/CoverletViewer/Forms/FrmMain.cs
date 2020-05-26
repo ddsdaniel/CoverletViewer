@@ -37,7 +37,7 @@ namespace CoverletViewer.Forms
             foreach (var result in results)
             {
                 AddLine(result);
-            }
+            }            
         }
 
         private void AddLine(Result result)
@@ -90,6 +90,7 @@ namespace CoverletViewer.Forms
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 Import(openFile.FileName);
+                SearchInResults();
             }
         }
 
@@ -147,7 +148,10 @@ namespace CoverletViewer.Forms
                 Cursor = Cursors.Default;
 
                 if (coverageJsonFiles.Length > 0)
+                {
                     Import(coverageJsonFiles[0]);
+                    SearchInResults();
+                }
                 else
                     MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
