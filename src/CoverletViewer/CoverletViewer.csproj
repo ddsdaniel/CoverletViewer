@@ -128,5 +128,8 @@
   <ItemGroup>
     <None Include="Resources\ico_coverlet_viewer.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\png_copy_16x16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

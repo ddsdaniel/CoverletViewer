@@ -10,6 +10,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using CoverletViewer.Extensions;
 using CoverletViewer.Enums;
+using System.Text;
+using static System.Windows.Forms.ListViewItem;
+using System.Security.Cryptography;
 
 namespace CoverletViewer.Forms
 {
@@ -84,6 +87,8 @@ namespace CoverletViewer.Forms
                     break;
             }
 
+            filteredResults = filteredResults.FindAll(r => (cboView.GetSelectedValue() == (int)ResultView.FilePath ? r.CodeFile.Path : r.Name).ToLower().Contains(txtSearch.Text.ToLower()));
+
             foreach (var result in filteredResults)
             {
                 AddLine(result);
@@ -108,12 +113,11 @@ namespace CoverletViewer.Forms
         {
             lvwResult.Columns.Clear();
             lvwResult.View = View.Details;
-            lvwResult.MultiSelect = false;
             lvwResult.FullRowSelect = true;
             lvwResult.AllowDrop = false;
 
-            lvwResult.Columns.Add("Item", (int)(lvwResult.Width * 0.65));
-            lvwResult.Columns.Add("Lines", (int)(lvwResult.Width * 0.2), HorizontalAlignment.Right);
+            lvwResult.Columns.Add("Item", (int)(lvwResult.Width * 0.75));
+            lvwResult.Columns.Add("Lines", (int)(lvwResult.Width * 0.1), HorizontalAlignment.Right);
             lvwResult.Columns.Add("Coverage", (int)(lvwResult.Width * 0.1), HorizontalAlignment.Right);
             lvwResult.Scrollable = true;
 
@@ -142,37 +146,12 @@ namespace CoverletViewer.Forms
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 Import(openFile.FileName);
-                SearchInResults();
             }
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-            SearchInResults();
-        }
-
-        private void SearchInResults()
-        {
-            var found = false;
-            foreach (ListViewItem item in lvwResult.Items)
-            {
-                if (item.SubItems[0].Text.ToLower().Contains(txtSearch.Text.ToLower()))
-                {
-                    item.ForeColor = lvwResult.ForeColor;
-
-                    if (!found)
-                    {
-                        lvwResult.EnsureVisible(item.Index);
-                        item.Selected = true;
-                        lvwResult.HideSelection = false;
-                    }
-                    found = true;
-                }
-                else
-                {
-                    item.ForeColor = SystemColors.GrayText;
-                }
-            }
+            LoadResults();
         }
 
         private void tsbRunDotnetTest_Click(object sender, EventArgs e)
@@ -202,7 +181,6 @@ namespace CoverletViewer.Forms
                 if (coverageJsonFiles.Length > 0)
                 {
                     Import(coverageJsonFiles[0]);
-                    SearchInResults();
                 }
                 else
                     MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -223,6 +201,55 @@ namespace CoverletViewer.Forms
         private void cboCoverageLevel_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadResults();
+        }
+
+        private void tsbCopySelectedRows_Click(object sender, EventArgs e)
+        {
+            CopySelectedRows();
+        }
+
+        private void CopySelectedRows()
+        {
+            if (lvwResult.SelectedItems.Count == 0)
+                return;
+
+            var sb = new StringBuilder();
+
+            foreach (ColumnHeader column in lvwResult.Columns)
+            {
+                sb.Append(column.Text + "\t");
+            }
+            sb.AppendLine("");
+
+            foreach (ListViewItem item in lvwResult.SelectedItems)
+            {
+                foreach (ListViewSubItem subItem in item.SubItems)
+                {
+                    sb.Append(subItem.Text + "\t");
+                }
+                sb.AppendLine("");
+            }
+
+            Clipboard.Clear();
+            Clipboard.SetText(sb.ToString());
+        }
+
+        private void lvwResult_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (ModifierKeys.HasFlag(Keys.Control))
+            {
+                if (e.KeyCode == Keys.A)
+                {
+                    foreach (ListViewItem item in lvwResult.Items)
+                    {
+                        item.Selected = true;
+                    }
+                }
+                else if (e.KeyCode == Keys.C)
+                {
+                    CopySelectedRows();
+                }
+            }
         }
     }
 }

@@ -73,6 +73,16 @@ namespace CoverletViewer.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap png_copy_16x16 {
+            get {
+                object obj = ResourceManager.GetObject("png_copy_16x16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap png_coverlet_64_64 {
             get {
                 object obj = ResourceManager.GetObject("png_coverlet_64_64", resourceCulture);

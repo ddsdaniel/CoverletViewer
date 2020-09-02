@@ -32,8 +32,9 @@
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbRunDotnetTest = new System.Windows.Forms.ToolStripButton();
-            this.tsbGitHub = new System.Windows.Forms.ToolStripButton();
+            this.tsbCopySelectedRows = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsbGitHub = new System.Windows.Forms.ToolStripButton();
             this.txtSearch = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -55,20 +56,22 @@
             this.lvwResult.HideSelection = false;
             this.lvwResult.Location = new System.Drawing.Point(12, 78);
             this.lvwResult.Name = "lvwResult";
-            this.lvwResult.Size = new System.Drawing.Size(972, 353);
+            this.lvwResult.Size = new System.Drawing.Size(1081, 546);
             this.lvwResult.TabIndex = 2;
             this.lvwResult.UseCompatibleStateImageBehavior = false;
+            this.lvwResult.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvwResult_KeyDown);
             // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbOpen,
             this.tsbRunDotnetTest,
-            this.tsbGitHub,
-            this.toolStripSeparator1});
+            this.tsbCopySelectedRows,
+            this.toolStripSeparator1,
+            this.tsbGitHub});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(996, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(1105, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -90,6 +93,20 @@
             this.tsbRunDotnetTest.Text = "Run dotnet test";
             this.tsbRunDotnetTest.Click += new System.EventHandler(this.tsbRunDotnetTest_Click);
             // 
+            // tsbCopySelectedRows
+            // 
+            this.tsbCopySelectedRows.Image = global::CoverletViewer.Properties.Resources.png_copy_16x16;
+            this.tsbCopySelectedRows.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tsbCopySelectedRows.Name = "tsbCopySelectedRows";
+            this.tsbCopySelectedRows.Size = new System.Drawing.Size(129, 22);
+            this.tsbCopySelectedRows.Text = "Copy selected rows";
+            this.tsbCopySelectedRows.Click += new System.EventHandler(this.tsbCopySelectedRows_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // tsbGitHub
             // 
             this.tsbGitHub.Image = global::CoverletViewer.Properties.Resources.png_github_32_32;
@@ -99,18 +116,13 @@
             this.tsbGitHub.Text = "Project on GitHub";
             this.tsbGitHub.Click += new System.EventHandler(this.tsbGitHub_Click);
             // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // txtSearch
             // 
             this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Location = new System.Drawing.Point(12, 52);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(618, 20);
+            this.txtSearch.Size = new System.Drawing.Size(727, 20);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
@@ -127,16 +139,16 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslVersion});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 441);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 634);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(996, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1105, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tsslVersion
             // 
             this.tsslVersion.Name = "tsslVersion";
-            this.tsslVersion.Size = new System.Drawing.Size(981, 17);
+            this.tsslVersion.Size = new System.Drawing.Size(1090, 17);
             this.tsslVersion.Spring = true;
             this.tsslVersion.Text = "{version}";
             this.tsslVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -146,7 +158,7 @@
             this.cboView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboView.FormattingEnabled = true;
-            this.cboView.Location = new System.Drawing.Point(813, 52);
+            this.cboView.Location = new System.Drawing.Point(922, 52);
             this.cboView.Name = "cboView";
             this.cboView.Size = new System.Drawing.Size(171, 21);
             this.cboView.TabIndex = 1;
@@ -156,7 +168,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(810, 36);
+            this.label2.Location = new System.Drawing.Point(919, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(91, 13);
             this.label2.TabIndex = 6;
@@ -166,7 +178,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(633, 36);
+            this.label3.Location = new System.Drawing.Point(742, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(78, 13);
             this.label3.TabIndex = 8;
@@ -177,7 +189,7 @@
             this.cboCoverageLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.cboCoverageLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboCoverageLevel.FormattingEnabled = true;
-            this.cboCoverageLevel.Location = new System.Drawing.Point(636, 52);
+            this.cboCoverageLevel.Location = new System.Drawing.Point(745, 52);
             this.cboCoverageLevel.Name = "cboCoverageLevel";
             this.cboCoverageLevel.Size = new System.Drawing.Size(171, 21);
             this.cboCoverageLevel.TabIndex = 7;
@@ -187,7 +199,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 463);
+            this.ClientSize = new System.Drawing.Size(1105, 656);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cboCoverageLevel);
             this.Controls.Add(this.label2);
@@ -226,6 +238,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cboCoverageLevel;
+        private System.Windows.Forms.ToolStripButton tsbCopySelectedRows;
     }
 }
 
