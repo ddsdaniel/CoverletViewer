@@ -27,7 +27,21 @@ namespace CoverletViewer.Forms
             Icon = Resources.ico_coverlet_viewer;
             tsslVersion.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             FormatListView();
+            LoadViewMode();
+            LoadCoverageLevels();
+        }
 
+        private void LoadCoverageLevels()
+        {
+            cboCoverageLevel.Items.AddItem((int)CoverageLevel.All, "All");
+            cboCoverageLevel.Items.AddItem((int)CoverageLevel.FullyCovered, "Fully covered");
+            cboCoverageLevel.Items.AddItem((int)CoverageLevel.PartiallyCovered, "Partially covered");
+            cboCoverageLevel.Items.AddItem((int)CoverageLevel.FullyUncovered, "Fully uncovered");
+            cboCoverageLevel.SelectByValue((int)CoverageLevel.All);
+        }
+
+        private void LoadViewMode()
+        {
             cboView.Items.AddItem((int)ResultView.FolderStructure, "Folder structure");
             cboView.Items.AddItem((int)ResultView.FilePath, "File path");
             cboView.SelectByValue((int)ResultView.FolderStructure);
@@ -56,6 +70,19 @@ namespace CoverletViewer.Forms
             var filteredResults = cboView.GetSelectedValue() == (int)ResultView.FilePath
                 ? _lastResult.FindAll(r => r.CodeFile != null)
                 : _lastResult;
+
+            switch ((CoverageLevel)cboCoverageLevel.GetSelectedValue())
+            {
+                case CoverageLevel.FullyCovered:
+                    filteredResults = filteredResults.FindAll(r => r.CoveredLines == r.TestableLines);
+                    break;
+                case CoverageLevel.PartiallyCovered:
+                    filteredResults = filteredResults.FindAll(r => r.CoveredLines != r.TestableLines);
+                    break;
+                case CoverageLevel.FullyUncovered:
+                    filteredResults = filteredResults.FindAll(r => r.CoveredLines == 0);
+                    break;
+            }
 
             foreach (var result in filteredResults)
             {
@@ -189,6 +216,11 @@ namespace CoverletViewer.Forms
         }
 
         private void cboView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadResults();
+        }
+
+        private void cboCoverageLevel_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadResults();
         }

@@ -40,6 +40,8 @@
             this.tsslVersion = new System.Windows.Forms.ToolStripStatusLabel();
             this.cboView = new System.Windows.Forms.ComboBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.cboCoverageLevel = new System.Windows.Forms.ComboBox();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +110,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSearch.Location = new System.Drawing.Point(12, 52);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(795, 20);
+            this.txtSearch.Size = new System.Drawing.Size(618, 20);
             this.txtSearch.TabIndex = 0;
             this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
             // 
@@ -134,7 +136,7 @@
             // tsslVersion
             // 
             this.tsslVersion.Name = "tsslVersion";
-            this.tsslVersion.Size = new System.Drawing.Size(785, 17);
+            this.tsslVersion.Size = new System.Drawing.Size(981, 17);
             this.tsslVersion.Spring = true;
             this.tsslVersion.Text = "{version}";
             this.tsslVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -160,11 +162,34 @@
             this.label2.TabIndex = 6;
             this.label2.Text = "Result view mode";
             // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(633, 36);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(78, 13);
+            this.label3.TabIndex = 8;
+            this.label3.Text = "Coverage level";
+            // 
+            // cboCoverageLevel
+            // 
+            this.cboCoverageLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboCoverageLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboCoverageLevel.FormattingEnabled = true;
+            this.cboCoverageLevel.Location = new System.Drawing.Point(636, 52);
+            this.cboCoverageLevel.Name = "cboCoverageLevel";
+            this.cboCoverageLevel.Size = new System.Drawing.Size(171, 21);
+            this.cboCoverageLevel.TabIndex = 7;
+            this.cboCoverageLevel.SelectedIndexChanged += new System.EventHandler(this.cboCoverageLevel_SelectedIndexChanged);
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(996, 463);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.cboCoverageLevel);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.cboView);
             this.Controls.Add(this.statusStrip1);
@@ -199,6 +224,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ComboBox cboView;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ComboBox cboCoverageLevel;
     }
 }
 

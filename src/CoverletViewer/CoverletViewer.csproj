@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ComboBoxItem.cs" />
+    <Compile Include="Enums\CoverageLevel.cs" />
     <Compile Include="Enums\ResultView.cs" />
     <Compile Include="Extensions\ComboBoxExtensions.cs" />
     <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
