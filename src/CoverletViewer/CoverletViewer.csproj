@@ -52,6 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ComboBoxItem.cs" />
+    <Compile Include="Enums\ResultView.cs" />
+    <Compile Include="Extensions\ComboBoxExtensions.cs" />
+    <Compile Include="Extensions\ObjectCollectionExtensions.cs" />
     <Compile Include="Forms\FrmMain.cs">
       <SubType>Form</SubType>
     </Compile>

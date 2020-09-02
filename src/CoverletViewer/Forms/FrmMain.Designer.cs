@@ -30,13 +30,16 @@
         {
             this.lvwResult = new System.Windows.Forms.ListView();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.tsbOpen = new System.Windows.Forms.ToolStripButton();
             this.tsbRunDotnetTest = new System.Windows.Forms.ToolStripButton();
             this.tsbGitHub = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.txtSearch = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsslVersion = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cboView = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -50,8 +53,8 @@
             this.lvwResult.HideSelection = false;
             this.lvwResult.Location = new System.Drawing.Point(12, 78);
             this.lvwResult.Name = "lvwResult";
-            this.lvwResult.Size = new System.Drawing.Size(776, 340);
-            this.lvwResult.TabIndex = 0;
+            this.lvwResult.Size = new System.Drawing.Size(972, 353);
+            this.lvwResult.TabIndex = 2;
             this.lvwResult.UseCompatibleStateImageBehavior = false;
             // 
             // toolStrip1
@@ -59,31 +62,13 @@
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbOpen,
             this.tsbRunDotnetTest,
-            this.tsbGitHub});
+            this.tsbGitHub,
+            this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(996, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSearch.Location = new System.Drawing.Point(12, 52);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(776, 20);
-            this.txtSearch.TabIndex = 2;
-            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 36);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(101, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Search in files result";
             // 
             // tsbOpen
             // 
@@ -112,13 +97,37 @@
             this.tsbGitHub.Text = "Project on GitHub";
             this.tsbGitHub.Click += new System.EventHandler(this.tsbGitHub_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSearch.Location = new System.Drawing.Point(12, 52);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(795, 20);
+            this.txtSearch.TabIndex = 0;
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(9, 36);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(101, 13);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Search in files result";
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsslVersion});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 441);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(996, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -130,11 +139,34 @@
             this.tsslVersion.Text = "{version}";
             this.tsslVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // cboView
+            // 
+            this.cboView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboView.FormattingEnabled = true;
+            this.cboView.Location = new System.Drawing.Point(813, 52);
+            this.cboView.Name = "cboView";
+            this.cboView.Size = new System.Drawing.Size(171, 21);
+            this.cboView.TabIndex = 1;
+            this.cboView.SelectedIndexChanged += new System.EventHandler(this.cboView_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(810, 36);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(91, 13);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "Result view mode";
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(996, 463);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.cboView);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSearch);
@@ -164,6 +196,9 @@
         private System.Windows.Forms.ToolStripButton tsbGitHub;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel tsslVersion;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ComboBox cboView;
+        private System.Windows.Forms.Label label2;
     }
 }
 

@@ -15,5 +15,11 @@ namespace CoverletViewer.Domain.Models
         public override int NotCoveredLines => Classes.Sum(c => c.Methods.Sum(m => m.NotCoveredLines.Count));
 
         public override int CoveredLines => Classes.Sum(c => c.Methods.Sum(m => m.CoveredLines.Count));
+        public decimal NotCoveredLinesPercentage => (decimal)NotCoveredLines / (NotCoveredLines + CoveredLines) * 100;
+
+        public override string ToString()
+        {
+            return Path;
+        }
     }
 }

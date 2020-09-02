@@ -7,11 +7,16 @@ using System.IO;
 using System.Diagnostics;
 using CoverletViewer.Properties;
 using System.Reflection;
+using System.Collections.Generic;
+using CoverletViewer.Extensions;
+using CoverletViewer.Enums;
 
 namespace CoverletViewer.Forms
 {
     public partial class FrmMain : Form
     {
+        private List<Result> _lastResult;
+
         public FrmMain()
         {
             InitializeComponent();
@@ -20,8 +25,12 @@ namespace CoverletViewer.Forms
         private void FrmMain_Load(object sender, EventArgs e)
         {
             Icon = Resources.ico_coverlet_viewer;
-            tsslVersion.Text= $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
+            tsslVersion.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             FormatListView();
+
+            cboView.Items.AddItem((int)ResultView.FolderStructure, "Folder structure");
+            cboView.Items.AddItem((int)ResultView.FilePath, "File path");
+            cboView.SelectByValue((int)ResultView.FolderStructure);
         }
 
         private void Import(string fileName)
@@ -32,12 +41,26 @@ namespace CoverletViewer.Forms
             var projects = importService.Import(fileName);
 
             var organizeService = new ResultsOrganizerService(projects);
-            var results = organizeService.Organize();
+            _lastResult = organizeService.Organize();
 
-            foreach (var result in results)
+            LoadResults();
+        }
+
+        private void LoadResults()
+        {
+            if (_lastResult == null)
+                return;
+
+            lvwResult.Items.Clear();
+
+            var filteredResults = cboView.GetSelectedValue() == (int)ResultView.FilePath
+                ? _lastResult.FindAll(r => r.CodeFile != null)
+                : _lastResult;
+
+            foreach (var result in filteredResults)
             {
                 AddLine(result);
-            }            
+            }
         }
 
         private void AddLine(Result result)
@@ -46,7 +69,9 @@ namespace CoverletViewer.Forms
             for (var i = 0; i < lvwResult.Columns.Count - 1; i++)
                 item.SubItems.Add("");
             item.Tag = result;
-            item.SubItems[0].Text = result.Name;
+            item.SubItems[0].Text = cboView.GetSelectedValue() == (int)ResultView.FilePath
+                ? result.CodeFile.Path
+                : result.Name;
             item.SubItems[1].Text = $"{result.CoveredLines}/{result.TestableLines}";
             item.SubItems[2].Text = $"{result.PercentageCoverage:0.0}%";
             lvwResult.Items.Add(item);
@@ -161,6 +186,11 @@ namespace CoverletViewer.Forms
         private void tsbGitHub_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/ddsdaniel/CoverletViewer");
+        }
+
+        private void cboView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadResults();
         }
     }
 }
