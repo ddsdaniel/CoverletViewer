@@ -163,6 +163,13 @@ namespace CoverletViewer.Forms
             if (openFileSolution.ShowDialog() == DialogResult.OK)
             {
                 Cursor = Cursors.WaitCursor;
+                
+                var folderSolutionPath = Path.GetDirectoryName(openFileSolution.FileName);
+                var coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
+                foreach (var oldFile in coverageJsonFiles)
+                {
+                    File.Delete(oldFile);
+                }
 
                 var msDosService = new MsDosService();
 
@@ -173,8 +180,7 @@ namespace CoverletViewer.Forms
 
                 var result = msDosService.Run(commandLine);
 
-                var folderSolutionPath = Path.GetDirectoryName(openFileSolution.FileName);
-                var coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
+                coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
 
                 Cursor = Cursors.Default;
 
@@ -183,7 +189,7 @@ namespace CoverletViewer.Forms
                     Import(coverageJsonFiles[0]);
                 }
                 else
-                    MessageBox.Show(result, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Failed to run tests.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
         }
