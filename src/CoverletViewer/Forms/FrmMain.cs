@@ -11,6 +11,7 @@ using CoverletViewer.Extensions;
 using CoverletViewer.Enums;
 using System.Text;
 using static System.Windows.Forms.ListViewItem;
+using System.Linq;
 
 namespace CoverletViewer.Forms
 {
@@ -25,11 +26,18 @@ namespace CoverletViewer.Forms
 
         private void FrmMain_Load(object sender, EventArgs e)
         {
+            SetStatus("");
             Icon = Resources.ico_coverlet_viewer;
             tsslVersion.Text = $"v{Assembly.GetExecutingAssembly().GetName().Version.ToString(3)}";
             FormatListView();
             LoadViewMode();
             LoadCoverageLevels();
+        }
+
+        private void SetStatus(string status)
+        {
+            tsslStatus.Text = status;
+            Application.DoEvents();
         }
 
         private void LoadCoverageLevels()
@@ -51,11 +59,11 @@ namespace CoverletViewer.Forms
 
         private void Import(string fileName)
         {
-            lvwResult.Items.Clear();
-
+            SetStatus("importing the file...");
             var importService = new ImportService();
             var projects = importService.Import(fileName);
 
+            SetStatus("Organizing the result...");
             var organizeService = new ResultsOrganizerService(projects);
             _lastResult = organizeService.Organize();
 
@@ -66,6 +74,8 @@ namespace CoverletViewer.Forms
         {
             if (_lastResult == null)
                 return;
+
+            SetStatus("Applying the filters...");
 
             lvwResult.Items.Clear();
 
@@ -91,10 +101,15 @@ namespace CoverletViewer.Forms
 
             filteredResults = filteredResults.FindAll(r => (cboView.GetSelectedValue() == (int)ResultView.FilePath ? r.CodeFile.Path : r.Name).ToLower().Contains(txtSearch.Text.ToLower()));
 
+            SetStatus("Displaying the results...");
+
             foreach (var result in filteredResults)
             {
                 AddLine(result);
             }
+
+            var contFiles = filteredResults.Where(r => r.CodeFile != null).Count();
+            SetStatus($"{contFiles} file(s)");
         }
 
         private void AddLine(Result result)
@@ -165,7 +180,8 @@ namespace CoverletViewer.Forms
             if (openFileSolution.ShowDialog() == DialogResult.OK)
             {
                 Cursor = Cursors.WaitCursor;
-                
+
+                SetStatus("Deleting old files...");
                 var folderSolutionPath = Path.GetDirectoryName(openFileSolution.FileName);
                 var coverageJsonFiles = Directory.GetFiles(folderSolutionPath, "coverage.json", SearchOption.AllDirectories);
                 foreach (var oldFile in coverageJsonFiles)
@@ -173,6 +189,7 @@ namespace CoverletViewer.Forms
                     File.Delete(oldFile);
                 }
 
+                SetStatus("Running tests...");
                 var msDosService = new MsDosService();
 
                 var commandLine = $"dotnet test \"{openFileSolution.FileName}\" ";
@@ -193,7 +210,10 @@ namespace CoverletViewer.Forms
                     Import(coverageJsonFiles[0]);
                 }
                 else
+                {
+                    SetStatus("");
                     MessageBox.Show("Failed to run tests.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
             }
 
         }

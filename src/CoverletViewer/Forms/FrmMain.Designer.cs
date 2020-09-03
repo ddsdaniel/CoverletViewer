@@ -43,6 +43,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.cboCoverageLevel = new System.Windows.Forms.ComboBox();
+            this.tsslStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -138,6 +139,7 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsslStatus,
             this.tsslVersion});
             this.statusStrip1.Location = new System.Drawing.Point(0, 634);
             this.statusStrip1.Name = "statusStrip1";
@@ -148,8 +150,7 @@
             // tsslVersion
             // 
             this.tsslVersion.Name = "tsslVersion";
-            this.tsslVersion.Size = new System.Drawing.Size(1090, 17);
-            this.tsslVersion.Spring = true;
+            this.tsslVersion.Size = new System.Drawing.Size(53, 17);
             this.tsslVersion.Text = "{version}";
             this.tsslVersion.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -195,6 +196,14 @@
             this.cboCoverageLevel.TabIndex = 7;
             this.cboCoverageLevel.SelectedIndexChanged += new System.EventHandler(this.cboCoverageLevel_SelectedIndexChanged);
             // 
+            // tsslStatus
+            // 
+            this.tsslStatus.Name = "tsslStatus";
+            this.tsslStatus.Size = new System.Drawing.Size(1037, 17);
+            this.tsslStatus.Spring = true;
+            this.tsslStatus.Text = "Status";
+            this.tsslStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // FrmMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,6 +248,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox cboCoverageLevel;
         private System.Windows.Forms.ToolStripButton tsbCopySelectedRows;
+        private System.Windows.Forms.ToolStripStatusLabel tsslStatus;
     }
 }
 
