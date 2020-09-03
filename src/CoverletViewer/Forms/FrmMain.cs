@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 using CoverletViewer.Domain.Models;
 using CoverletViewer.Domain.Services;
@@ -12,7 +11,6 @@ using CoverletViewer.Extensions;
 using CoverletViewer.Enums;
 using System.Text;
 using static System.Windows.Forms.ListViewItem;
-using System.Security.Cryptography;
 
 namespace CoverletViewer.Forms
 {
@@ -39,6 +37,7 @@ namespace CoverletViewer.Forms
             cboCoverageLevel.Items.AddItem((int)CoverageLevel.All, "All");
             cboCoverageLevel.Items.AddItem((int)CoverageLevel.FullyCovered, "Fully covered");
             cboCoverageLevel.Items.AddItem((int)CoverageLevel.PartiallyCovered, "Partially covered");
+            cboCoverageLevel.Items.AddItem((int)CoverageLevel.HalfOrLessCoverage, "50% or less coverage");
             cboCoverageLevel.Items.AddItem((int)CoverageLevel.FullyUncovered, "Fully uncovered");
             cboCoverageLevel.SelectByValue((int)CoverageLevel.All);
         }
@@ -81,6 +80,9 @@ namespace CoverletViewer.Forms
                     break;
                 case CoverageLevel.PartiallyCovered:
                     filteredResults = filteredResults.FindAll(r => r.CoveredLines != r.TestableLines);
+                    break;
+                case CoverageLevel.HalfOrLessCoverage:
+                    filteredResults = filteredResults.FindAll(r => r.PercentageCoverage <= 50);
                     break;
                 case CoverageLevel.FullyUncovered:
                     filteredResults = filteredResults.FindAll(r => r.CoveredLines == 0);
@@ -173,10 +175,12 @@ namespace CoverletViewer.Forms
 
                 var msDosService = new MsDosService();
 
-                var commandLine = $"dotnet test \"{openFileSolution.FileName}\" /p:CollectCoverage=true ";
+                var commandLine = $"dotnet test \"{openFileSolution.FileName}\" ";
+                commandLine += "/p:CollectCoverage=true ";
                 commandLine += "/p:CoverletOutput=..\\results\\coverage ";
                 commandLine += "/p:MergeWith=..\\results\\coverage.json ";
-                commandLine += "/p:CoverletOutputFormat=\"json\"";
+                commandLine += "/p:CoverletOutputFormat=\"json\" ";
+                commandLine += "/p:SkipAutoProps=true";
 
                 var result = msDosService.Run(commandLine);
 
