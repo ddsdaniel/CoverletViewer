@@ -212,7 +212,7 @@ namespace CoverletViewer.Forms
                 else
                 {
                     SetStatus("");
-                    MessageBox.Show("Failed to run tests.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    MessageBox.Show("Failed to run tests or Coverlet not installed.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 }
             }
 
